@@ -1,0 +1,1 @@
+from .collect import collect_security_wait_times
