@@ -2,7 +2,7 @@ import requests
 import enum
 
 
-API_URL_SECURITY_WAIT_TIMES = "https://avi-prod-mpp-webapp-api.azurewebsites.net/api/v1/SecurityWaitTimesPoints/JFK"
+API_URL_SECURITY_WAIT_TIMES = "https://avi-prod-mpp-webapp-api.azurewebsites.net/api/v1/SecurityWaitTimesPoints/{airport}"
 
 
 class SecurityQueueType(enum.Enum):
@@ -27,17 +27,17 @@ class SecurityWaitTimeEntry:
         self.wait_time_seconds = wait_time_seconds
 
 
-def collect_security_wait_times() -> [SecurityWaitTimeEntry]:
+def collect_security_wait_times(airport) -> [SecurityWaitTimeEntry]:
     session = requests.Session()
     session.headers.update({"referer": "https://www.jfkairport.com"})
 
-    wait_times = session.get(API_URL_SECURITY_WAIT_TIMES).json()
+    wait_times = session.get(API_URL_SECURITY_WAIT_TIMES.format(airport=airport)).json()
     results = []
 
     for entry in wait_times:
         results.append(
             SecurityWaitTimeEntry(
-                int(entry["terminal"]),
+                entry["terminal"],
                 entry["checkPoint"],
                 SecurityQueueType.from_string(entry["queueType"]),
                 int(entry["timeInSeconds"]),

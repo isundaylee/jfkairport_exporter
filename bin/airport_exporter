@@ -49,10 +49,14 @@ timer_scrape_time = prometheus_client.Summary(
 def scrape_data():
     logging.info("Scraping data...")
 
-    for entry in collect_security_wait_times():
-        gauge_tsa_wait_time.labels(
-            airport="JFK", check_point=entry.check_point, terminal=entry.terminal, type=entry.queue_type.name
-        ).set(entry.wait_time_seconds)
+    for airport in ["JFK", "EWR", "LGA"]:
+        for entry in collect_security_wait_times(airport):
+            gauge_tsa_wait_time.labels(
+                airport=airport,
+                check_point=entry.check_point,
+                terminal=entry.terminal,
+                type=entry.queue_type.name,
+            ).set(entry.wait_time_seconds)
 
 
 def main() -> None:
