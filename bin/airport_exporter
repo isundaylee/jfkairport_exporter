@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import time
 import logging
@@ -14,7 +16,7 @@ class Args(argparse.Namespace):
 
 def parse_args() -> Args:
     parser = argparse.ArgumentParser(
-        "main.py", description="JFK airport TSA queue exporter for Prometheus."
+        "airport_exporter", description="JFK airport TSA queue exporter for Prometheus."
     )
 
     parser.add_argument(
