@@ -40,8 +40,12 @@ gauge_tsa_wait_time = prometheus_client.Gauge(
     "Airport TSA queue wait time in seconds.",
     ["airport", "terminal", "type"],
 )
+timer_scrape_time = prometheus_client.Summary(
+    "airport_scrape_time_seconds", "Time it took to do one data scrape.",
+)
 
 
+@timer_scrape_time.time()
 def scrape_data():
     logging.info("Scraping data...")
 
