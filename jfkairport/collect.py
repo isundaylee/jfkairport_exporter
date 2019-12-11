@@ -10,7 +10,7 @@ class SecurityQueueType(enum.Enum):
     TSA_PRECHECK = 1
 
     @classmethod
-    def from_string(cls, string) -> 'SecurityQueueType':
+    def from_string(cls, string) -> "SecurityQueueType":
         if string == "Reg":
             return cls.MAIN
         elif string == "TSAPre":
@@ -20,8 +20,9 @@ class SecurityQueueType(enum.Enum):
 
 
 class SecurityWaitTimeEntry:
-    def __init__(self, terminal, queue_type, wait_time_seconds):
+    def __init__(self, terminal, check_point, queue_type, wait_time_seconds):
         self.terminal = terminal
+        self.check_point = check_point
         self.queue_type = queue_type
         self.wait_time_seconds = wait_time_seconds
 
@@ -37,6 +38,7 @@ def collect_security_wait_times() -> [SecurityWaitTimeEntry]:
         results.append(
             SecurityWaitTimeEntry(
                 int(entry["terminal"]),
+                entry["checkPoint"],
                 SecurityQueueType.from_string(entry["queueType"]),
                 int(entry["timeInSeconds"]),
             )

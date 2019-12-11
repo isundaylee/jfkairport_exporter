@@ -38,7 +38,7 @@ def parse_args() -> Args:
 gauge_tsa_wait_time = prometheus_client.Gauge(
     "airport_tsa_wait_time_seconds",
     "Airport TSA queue wait time in seconds.",
-    ["airport", "terminal", "type"],
+    ["airport", "check_point", "terminal", "type"],
 )
 timer_scrape_time = prometheus_client.Summary(
     "airport_scrape_time_seconds", "Time it took to do one data scrape.",
@@ -51,7 +51,7 @@ def scrape_data():
 
     for entry in collect_security_wait_times():
         gauge_tsa_wait_time.labels(
-            airport="JFK", terminal=entry.terminal, type=entry.queue_type.name
+            airport="JFK", check_point=entry.check_point, terminal=entry.terminal, type=entry.queue_type.name
         ).set(entry.wait_time_seconds)
 
 
